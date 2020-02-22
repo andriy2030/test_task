@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "577194572654",
+    "firebase_url": "https://funnychat-4cc6b.firebaseio.com",
+    "project_id": "funnychat-4cc6b",
+    "storage_bucket": "funnychat-4cc6b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577194572654:android:8f401aaef139c553d45f7f",
+        "android_client_info": {
+          "package_name": "io.andriy.funny_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "577194572654-1v77a466q38lsvvdgbjc88ak7t0v103t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2LKE2aqVlBMWOvaqhgPKLa7VJOr7ipqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "577194572654-1v77a466q38lsvvdgbjc88ak7t0v103t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
