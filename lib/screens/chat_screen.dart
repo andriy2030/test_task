@@ -3,6 +3,7 @@ import 'package:funny_chat/screens/welcome_screen.dart';
 import '../constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser logInUser;
@@ -74,10 +75,13 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   FlatButton(
                     onPressed: () {
+                      DateTime now = DateTime.now();
+                      String formattedDate = DateFormat.Hm().format(now);
                       messageTextController.clear();
-                      _firestore.collection('message').add({
+                      _firestore.collection('messages').add({
                         'text':messageText,
                         'sender':logInUser.email,
+                        'date': formattedDate,
                       });
                     },
                     child: Text(
@@ -99,17 +103,18 @@ class MessagesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('message').snapshots(),
+      stream: _firestore.collection('messages').snapshots(),
       builder: (context, snapshot){
         if(snapshot.hasData){
-          final messagesOfStreem = snapshot.data.documents;
+          final messagesOfStreem = snapshot.data.documents.reversed;
           List<RoundedMessage> messageWidgets = [];
           for(var message in messagesOfStreem){
             final messageText = message.data['text'];
             final messageSender = message.data['sender'];
+            final messageDate = message.data['date'];
             final currentUser = logInUser.email;
 
-            final roundedMessage = RoundedMessage(sender: messageSender, text: messageText, isMe: currentUser == messageSender,);
+            final roundedMessage = RoundedMessage(sender: messageSender, text: messageText, date: messageDate, isMe: currentUser == messageSender,);
             messageWidgets.add(roundedMessage);
           }
           return Expanded(
@@ -127,9 +132,10 @@ class MessagesStream extends StatelessWidget {
 
 class RoundedMessage extends StatelessWidget {
 
-  RoundedMessage({this.sender, this.text, this.isMe});
+  RoundedMessage({this.sender, this.text, this.date, this.isMe});
   String sender;
   String text;
+  String date;
   final bool isMe;
 
   @override
@@ -139,14 +145,25 @@ class RoundedMessage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          Text(sender, style: TextStyle(fontSize: 12.0),),
+          Row(
+            children: <Widget>[
+              Text(sender, style: TextStyle(fontSize: 13.0),),
+              SizedBox(width: 10.0,),
+              Text(date, style: TextStyle(fontSize: 13.0),),
+            ],
+          ),
           Material(
             borderRadius: BorderRadius.circular(30.0),
             elevation: 5.0,
             color: isMe? Colors.blue : Colors.white,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-              child: Text('$text', style: TextStyle(fontSize: 20.0, color: isMe ? Colors.white : Colors.black),
+            child: FlatButton(
+              onLongPress: (){
+
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                child: Text('$text', style: TextStyle(fontSize: 18.0, color: isMe ? Colors.white : Colors.black),
+                ),
               ),
             ),
           ),

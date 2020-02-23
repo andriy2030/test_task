@@ -63,14 +63,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
             ),
             RoundedButton(
               onPressed: () {
-                //Go to login screen.
                 Navigator.pushNamed(context, LoginScreen.id);
               },
               text: 'Log In',
             ),
             RoundedButton(
               onPressed: () {
-                //Go to registration screen.
                 Navigator.pushNamed(context, RegistrationScreen.id);
               },
               text: 'Register',
