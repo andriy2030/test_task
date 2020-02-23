@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dash_chat/dash_chat.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';

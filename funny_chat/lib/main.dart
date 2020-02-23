@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:funny_chat/screens/chat_dash_screen.dart';
 import './screens/welcome_screen.dart';
 import './screens/login_screen.dart';
 import './screens/registration_screen.dart';
@@ -12,14 +11,16 @@ class FunnyChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
+
       initialRoute: WelcomeScreen.id,
-      routes: {
+      routes:{
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
         ChatScreen.id: (context) => ChatScreen(),
-        ChatDashScreen.id: (context) => ChatDashScreen(),
-      },
+      } ,
+
     );
   }
 }

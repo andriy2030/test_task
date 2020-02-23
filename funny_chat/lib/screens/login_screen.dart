@@ -1,19 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:funny_chat/screens/chat_dash_screen.dart';
-
-import '../constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../rounded_button.dart';
+import '../constants.dart';
+import './chat_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
+  String email;
+  String password;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
             TextField(
               keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
-                //Do something with the user input.
+                email = value;
               },
-              decoration:
-                  kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+              decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
             ),
             SizedBox(
               height: 8.0,
@@ -49,17 +48,24 @@ class _LoginScreenState extends State<LoginScreen> {
             TextField(
               obscureText: true,
               onChanged: (value) {
-                //Do something with the user input.
+                password = value;
               },
-              decoration: kTextFieldDecoration.copyWith(
-                  hintText: 'Enter your password'),
+              decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your password'),
             ),
             SizedBox(
               height: 24.0,
             ),
             RoundedButton(
-              onPressed: () {
-                _signInAnonymously();
+              onPressed: (){
+                try {
+                  final user = _auth.signInWithEmailAndPassword(
+                      email: email, password: password);
+                  if (user != null) {
+                    Navigator.pushNamed(context, ChatScreen.id);
+                  }
+                }catch(e){
+                  print(e);
+                }
               },
               text: 'Log in',
             ),
@@ -67,15 +73,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _signInAnonymously() async {
-    try {
-      await FirebaseAuth.instance
-          .signInAnonymously()
-          .then((value) => {Navigator.pushNamed(context, ChatDashScreen.id)});
-    } catch (e) {
-      print(e);
-    }
   }
 }
