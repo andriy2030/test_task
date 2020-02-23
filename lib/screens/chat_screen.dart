@@ -18,7 +18,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   String messageText;
-  int count = 0;
+
 
   @override
   void initState() {
@@ -76,11 +76,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   FlatButton(
                     onPressed: () {
+                      print(logInUser.email);
                       DateTime now = DateTime.now();
-                      String formattedDate = DateFormat.Hm().format(now);
+                      String formattedDate = DateFormat.Hms().format(now);
                       messageTextController.clear();
                       _firestore.collection('messages').add({
-                        'id': ++count,
                         'text':messageText,
                         'sender':logInUser.email,
                         'date': formattedDate,
@@ -111,7 +111,6 @@ class MessagesStream extends StatelessWidget {
           final messagesOfStreem = snapshot.data.documents.reversed;
           List<RoundedMessage> messageWidgets = [];
           for(var message in messagesOfStreem){
-            final messageId = message.data['id'];
             final messageText = message.data['text'];
             final messageSender = message.data['sender'];
             final messageDate = message.data['date'];
@@ -135,8 +134,8 @@ class MessagesStream extends StatelessWidget {
 
 class RoundedMessage extends StatelessWidget {
 
-  RoundedMessage({this.id, this.sender, this.text, this.date, this.isMe});
-  int id;
+  RoundedMessage({this.sender, this.text, this.date, this.isMe});
+
   String sender;
   String text;
   String date;
@@ -149,7 +148,7 @@ class RoundedMessage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
+          Row(mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: <Widget>[
               Text(sender, style: TextStyle(fontSize: 13.0),),
               SizedBox(width: 10.0,),
@@ -174,7 +173,8 @@ class RoundedMessage extends StatelessWidget {
                             FlatButton(
                               child: Text("Delete"),
                               onPressed: () {
-                                _firestore.collection('messages').document('$text').delete();
+                                //_firestore.collection('messages').document('$text').delete();
+                                print(isMe);
                               },
                             ),
                             FlatButton(
