@@ -75,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   FlatButton(
                     onPressed: () {
                       messageTextController.clear();
-                      _firestore.collection('messages').add({
+                      _firestore.collection('message').add({
                         'text':messageText,
                         'sender':logInUser.email,
                       });
@@ -99,7 +99,7 @@ class MessagesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('messages').snapshots(),
+      stream: _firestore.collection('message').snapshots(),
       builder: (context, snapshot){
         if(snapshot.hasData){
           final messagesOfStreem = snapshot.data.documents;
