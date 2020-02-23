@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser logInUser;
+int count = 0;
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
@@ -79,6 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       String formattedDate = DateFormat.Hm().format(now);
                       messageTextController.clear();
                       _firestore.collection('messages').add({
+                        'id': ++count,
                         'text':messageText,
                         'sender':logInUser.email,
                         'date': formattedDate,
@@ -109,6 +111,7 @@ class MessagesStream extends StatelessWidget {
           final messagesOfStreem = snapshot.data.documents.reversed;
           List<RoundedMessage> messageWidgets = [];
           for(var message in messagesOfStreem){
+            final messageId = message.data['id'];
             final messageText = message.data['text'];
             final messageSender = message.data['sender'];
             final messageDate = message.data['date'];
@@ -132,7 +135,8 @@ class MessagesStream extends StatelessWidget {
 
 class RoundedMessage extends StatelessWidget {
 
-  RoundedMessage({this.sender, this.text, this.date, this.isMe});
+  RoundedMessage({this.id, this.sender, this.text, this.date, this.isMe});
+  int id;
   String sender;
   String text;
   String date;
@@ -158,7 +162,33 @@ class RoundedMessage extends StatelessWidget {
             color: isMe? Colors.blue : Colors.white,
             child: FlatButton(
               onLongPress: (){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
 
+                    return AlertDialog(
+                      title: Text("Do you want to delete this message ?"),
+                      content: null,
+                      actions: <Widget>[  Row(
+                          children: <Widget>[
+                            FlatButton(
+                              child: Text("Delete"),
+                              onPressed: () {
+                                _firestore.collection('messages').document('$text').delete();
+                              },
+                            ),
+                            FlatButton(
+                              child: Text("Close"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
