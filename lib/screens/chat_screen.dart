@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser logInUser;
-int count = 0;
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
@@ -19,6 +18,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   String messageText;
+  int count = 0;
 
   @override
   void initState() {
