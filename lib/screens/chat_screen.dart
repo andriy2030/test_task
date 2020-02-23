@@ -173,8 +173,7 @@ class RoundedMessage extends StatelessWidget {
                             FlatButton(
                               child: Text("Delete"),
                               onPressed: () {
-                                //_firestore.collection('messages').document('$text').delete();
-                                print(isMe);
+                                
                               },
                             ),
                             FlatButton(
